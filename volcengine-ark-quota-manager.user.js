@@ -5,7 +5,7 @@
 // @description  自动批量关闭、智能设置或自定义固定值设置模型推理限额。支持分页、中断操作和更稳定的循环。
 // @author       guihuashaoxiang
 // @homepageURL  https://github.com/guihuashaoxiang
-// @match        https://console.volcengine.com/ark/region:ark+cn-beijing/openManagement*
+// @match        https://console.volcengine.com/ark/region*
 // @grant        GM_addStyle
 // @grant        GM_log
 // @grant        GM_setValue
@@ -360,7 +360,9 @@
         document.body.appendChild(panel);
 
         panel.innerHTML = `
-            <div class="tm-panel-header">模型限额助手 v1.7</div>
+            <div class="tm-panel-header">模型限额助手 v1.7
+                <span class="tm-collapse-btn">−</span>
+            </div>
             <div class="tm-panel-body">
                 <button id="tm-btn-close-all" class="tm-button">一键关闭所有限额</button>
                 <hr class="tm-divider">
@@ -395,6 +397,50 @@
             </div>
         `;
 
+        // 添加拖动功能
+        let isDragging = false;
+        let offsetX, offsetY;
+        
+        panel.querySelector('.tm-panel-header').addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('tm-collapse-btn')) return;
+            
+            isDragging = true;
+            offsetX = e.clientX - panel.getBoundingClientRect().left;
+            offsetY = e.clientY - panel.getBoundingClientRect().top;
+            panel.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            panel.style.left = (e.clientX - offsetX) + 'px';
+            panel.style.top = (e.clientY - offsetY) + 'px';
+            panel.style.right = 'auto';
+            panel.style.bottom = 'auto';
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            panel.style.cursor = 'grab';
+        });
+
+        // 添加收缩/展开功能
+        const collapseBtn = panel.querySelector('.tm-collapse-btn');
+        const panelBody = panel.querySelector('.tm-panel-body');
+        const panelNotes = panel.querySelector('.tm-panel-notes');
+        
+        collapseBtn.addEventListener('click', () => {
+            if (panelBody.style.display === 'none') {
+                panelBody.style.display = '';
+                panelNotes.style.display = '';
+                collapseBtn.textContent = '−';
+            } else {
+                panelBody.style.display = 'none';
+                panelNotes.style.display = 'none';
+                collapseBtn.textContent = '+';
+            }
+        });
+
         document.getElementById('tm-btn-close-all').addEventListener('click', closeAllLimits);
         document.getElementById('tm-btn-set-smart').addEventListener('click', setSmartLimits);
         document.getElementById('tm-btn-set-fixed').addEventListener('click', setFixedLimit); // 新增
@@ -424,7 +470,20 @@
             border-bottom: 1px solid #e8e8e8;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
-            cursor: move;
+            cursor: grab;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .tm-collapse-btn {
+            cursor: pointer;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+            user-select: none;
+        }
+        .tm-collapse-btn:hover {
+            color: #1677ff;
         }
         .tm-panel-body {
             padding: 15px;
