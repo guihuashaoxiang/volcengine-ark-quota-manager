@@ -29,7 +29,7 @@
 1.  **安装油猴 (Tampermonkey) 插件**:
     *   如果你还没有安装，请先为你的浏览器（如 Chrome, Firefox, Edge）安装 [Tampermonkey](https://www.tampermonkey.net/) 插件。
 2.  **安装本脚本**:
-    *   点击此链接进行安装: [**https://github.com/guihuashaoxiang/volcengine-ark-quota-manager/raw/main/ark-quota-script.user.js**](https://github.com/guihuashaoxiang/volcengine-ark-quota-manager/raw/main/ark-quota-script.user.js)
+*   点击此链接进行安装: [**https://raw.githubusercontent.com/guihuashaoxiang/volcengine-ark-quota-manager/main/volcengine-ark-quota-manager.user.js**](https://raw.githubusercontent.com/guihuashaoxiang/volcengine-ark-quota-manager/main/volcengine-ark-quota-manager.user.js)
     *   Tampermonkey 会自动弹出安装页面，点击“安装”即可。
 
 ### 使用说明
